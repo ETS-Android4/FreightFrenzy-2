@@ -1,38 +1,20 @@
 package org.firstinspires.ftc.teamcode;
 
-//import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.hardware.rev.RevTouchSensor;
-import com.qualcomm.robotcore.hardware.AnalogInput;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-
 
 
 public class Demo_Hardware {
 
-    public DcMotor RF;
+    DcMotor RF;
+    DcMotor RB;
+    DcMotor LF;
+    DcMotor LB;
+    Servo arm;
+    Servo claw;
 
-    public DcMotor RB;
-
-    public DcMotor LF;
-
-    public DcMotor LB;
-
-    public Servo arm;
-
-    public Servo claw;
-
-    public Demo_Hardware() {
-
-    }
-
-    public void init( HardwareMap hardwareMap ) {
+    public Demo_Hardware( HardwareMap hardwareMap ) {
 
         try {
             LF = hardwareMap.dcMotor.get("LF");
@@ -50,6 +32,7 @@ public class Demo_Hardware {
         } catch (Exception a) {
             RF = null;
         }
+
         try {
             LB = hardwareMap.dcMotor.get("LB");
             LB.setPower(0);
@@ -58,6 +41,7 @@ public class Demo_Hardware {
         } catch (Exception a) {
             LB = null;
         }
+
         try {
             RB = hardwareMap.dcMotor.get("RB");
             RB.setPower(0);
@@ -65,13 +49,15 @@ public class Demo_Hardware {
         } catch (Exception a) {
             RB = null;
         }
-        try{
+
+        try {
             arm = hardwareMap.servo.get("arm");
 
         } catch(Exception a){
             arm = null;
         }
-        try{
+
+        try {
             claw = hardwareMap.servo.get("claw");
 
         } catch(Exception a){
