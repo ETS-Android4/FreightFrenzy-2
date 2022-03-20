@@ -2,14 +2,17 @@ package org.firstinspires.ftc.teamcode.example;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.teamcode.hardware.ExampleHardware;
+import org.firstinspires.ftc.teamcode.hardware.ExampleDriveTrain;
+import org.firstinspires.ftc.teamcode.hardware.ExampleServo;
 
 @TeleOp(name = "ExampleTeleOp", group="Example")
 public class ExampleTeleOp extends LinearOpMode{
 
     public void runOpMode() {
 
-        ExampleHardware robot = new ExampleHardware( hardwareMap );
+        ExampleDriveTrain driveTrain = new ExampleDriveTrain( hardwareMap );
+        ExampleServo claw = new ExampleServo( hardwareMap, "claw");
+        ExampleServo arm = new ExampleServo( hardwareMap, "arm");
 
         waitForStart();
 
@@ -22,23 +25,23 @@ public class ExampleTeleOp extends LinearOpMode{
             telemetry.addData("leftystick", leftystick);
             telemetry.update();
 
-            robot.drive( leftxstick, leftystick );
+            driveTrain.drive( leftxstick, leftystick );
 
             if( gamepad1.x ) {
-                robot.setClawPosition( 0.714 );
+                claw.setPosition( 0.714 );
 
             } else if( gamepad1.y ) {
-                robot.setClawPosition( 0.970 );
+                claw.setPosition( 0.970 );
             }
 
             if( gamepad1.a ) {
-                robot.setArmPosition( 0.721 );
+                arm.setPosition( 0.721 );
 
             } else if( gamepad1.b ) {
-                robot.setArmPosition( 0.853 );
+                arm.setPosition( 0.853 );
 
             } else if( gamepad1.right_bumper ) {
-                robot.setArmPosition( 0.650 );
+                arm.setPosition( 0.650 );
             }
         }
     }

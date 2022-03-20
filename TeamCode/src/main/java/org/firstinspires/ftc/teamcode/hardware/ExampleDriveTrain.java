@@ -2,19 +2,15 @@ package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 
-
-public class ExampleHardware {
+public class ExampleDriveTrain {
 
     DcMotor RF;
     DcMotor RB;
     DcMotor LF;
     DcMotor LB;
-    Servo arm;
-    Servo claw;
 
-    public ExampleHardware(HardwareMap hardwareMap ) {
+    public ExampleDriveTrain(HardwareMap hardwareMap ) {
 
         try {
             LF = hardwareMap.dcMotor.get("LF");
@@ -49,20 +45,6 @@ public class ExampleHardware {
         } catch (Exception a) {
             RB = null;
         }
-
-        try {
-            arm = hardwareMap.servo.get("arm");
-
-        } catch(Exception a){
-            arm = null;
-        }
-
-        try {
-            claw = hardwareMap.servo.get("claw");
-
-        } catch(Exception a){
-            claw = null;
-        }
     }
 
     public void drive( double x, double y ) {
@@ -93,15 +75,5 @@ public class ExampleHardware {
             LB.setPower(0);
             RB.setPower(0);
         }
-    }
-
-    public void setClawPosition( double position ) {
-
-        claw.setPosition( position );
-    }
-
-    public void setArmPosition( double position ) {
-
-        arm.setPosition( position );
     }
 }
