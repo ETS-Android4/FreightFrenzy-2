@@ -1,20 +1,15 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.example;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.VoltageSensor;
-import com.qualcomm.robotcore.util.ElapsedTime;
+import org.firstinspires.ftc.teamcode.hardware.ExampleHardware;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-
-@TeleOp(name = "Demo_TeleOp", group="Demo")
-public class Demo_TeleOp extends LinearOpMode{
+@TeleOp(name = "ExampleTeleOp", group="Example")
+public class ExampleTeleOp extends LinearOpMode{
 
     public void runOpMode() {
 
-        Demo_Hardware robot = new Demo_Hardware( hardwareMap );
+        ExampleHardware robot = new ExampleHardware( hardwareMap );
 
         waitForStart();
 

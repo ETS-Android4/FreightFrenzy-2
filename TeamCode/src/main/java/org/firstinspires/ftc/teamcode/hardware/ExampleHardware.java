@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 
-public class Demo_Hardware {
+public class ExampleHardware {
 
     DcMotor RF;
     DcMotor RB;
@@ -14,7 +14,7 @@ public class Demo_Hardware {
     Servo arm;
     Servo claw;
 
-    public Demo_Hardware( HardwareMap hardwareMap ) {
+    public ExampleHardware(HardwareMap hardwareMap ) {
 
         try {
             LF = hardwareMap.dcMotor.get("LF");

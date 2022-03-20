@@ -33,6 +33,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.hardware.SampleHardware;
+
 /**
  * This OpMode uses the common Pushbot hardware class to define the devices on the robot.
  * All device access is managed through the HardwarePushbot class.
@@ -47,13 +49,8 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Demo: Teleop", group="Demo")
-public class DemoTeleop_Linear extends LinearOpMode {
-
-    /* Declare OpMode members. */
-    RobotHardware robot             = new RobotHardware();   // Use a common hardware class
-    double          servoOffset     = 0;                       // Servo mid position
-    final double    SERVO_SPEED     = 0.02 ;                   // sets rate to move servo
+@TeleOp(name="SampleTeleOp", group="Sample")
+public class SampleTeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode() {
@@ -61,7 +58,10 @@ public class DemoTeleop_Linear extends LinearOpMode {
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
          */
-        robot.init(hardwareMap);
+        SampleHardware robot = new SampleHardware( hardwareMap );
+
+        /* Declare OpMode members. */
+        final double    SERVO_SPEED     = 0.02 ;                   // sets rate to move servo
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");    //
@@ -79,19 +79,15 @@ public class DemoTeleop_Linear extends LinearOpMode {
             double direction = -gamepad1.left_stick_y;
 
             // Output the safe vales to the motor drives.
-            robot.motor.setPower(direction);
+            robot.setMotorPower(direction);
 
             // Use gamepad left & right Bumpers to open and close the servo
             if (gamepad1.right_bumper)
-                servoOffset += SERVO_SPEED;
+                robot.updateServoPosition( SERVO_SPEED );
             else if (gamepad1.left_bumper)
-                servoOffset -= SERVO_SPEED;
+                robot.updateServoPosition( -SERVO_SPEED );
 
-            // Move both servos to new position.  Assume servos are mirror image of each other.
-            servoOffset = Range.clip(servoOffset, -0.5, 0.5);
-
-            robot.servo.setPosition(robot.MID_SERVO + servoOffset);
-/*
+    /*
             // Use gamepad buttons to move arm up (Y) and down (A)
             if (gamepad1.y)
                 robot.leftArm.setPower(robot.ARM_UP_POWER);
@@ -102,8 +98,14 @@ public class DemoTeleop_Linear extends LinearOpMode {
 */
             // Send telemetry message to signify robot running;
             telemetry.addData("direction",  "%.2f", direction);
-            telemetry.addData("servo",  "Offset = %.2f", servoOffset);
-            telemetry.addData( "touch", robot.touch.isPressed() ? "true" : "false");
+            telemetry.addData("servo",  "Offset = %.2f", robot.getServoPosition() );
+            telemetry.addData( "touch", robot.touchIsPressed() ? "true" : "false");
+
+            // check the status of the x button on either gamepad.
+            boolean bCurrState = gamepad1.x;
+
+            robot.updateColor( bCurrState, telemetry );
+
             telemetry.update();
 
             // Pace this loop so jaw action is reasonable speed.
