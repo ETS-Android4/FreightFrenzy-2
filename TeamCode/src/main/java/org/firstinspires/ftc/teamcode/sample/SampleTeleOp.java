@@ -31,22 +31,14 @@ package org.firstinspires.ftc.teamcode.sample;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.hardware.SampleHardware;
+import org.firstinspires.ftc.teamcode.hardware.SampleColorSensor;
+import org.firstinspires.ftc.teamcode.hardware.SampleMotor;
+import org.firstinspires.ftc.teamcode.hardware.SampleServo;
+import org.firstinspires.ftc.teamcode.hardware.SampleTouchSensor;
 
 /**
- * This OpMode uses the common Pushbot hardware class to define the devices on the robot.
- * All device access is managed through the HardwarePushbot class.
- * The code is structured as a LinearOpMode
- *
- * This particular OpMode executes a POV Game style Teleop for a PushBot
- * In this mode the left stick moves the robot FWD and back, the Right stick turns left and right.
- * It raises and lowers the claw using the Gampad Y and A buttons respectively.
- * It also opens and closes the claws slowly using the left and right Bumper buttons.
- *
- * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
+ * This particular OpMode demonstrates how to access a variety of motors and sensors
  */
 
 @TeleOp(name="SampleTeleOp", group="Sample")
@@ -56,9 +48,12 @@ public class SampleTeleOp extends LinearOpMode {
     public void runOpMode() {
 
         /* Initialize the hardware variables.
-         * The init() method of the hardware class does all the work here
+         * The constructor of the hardware class does all the work here
          */
-        SampleHardware robot = new SampleHardware( hardwareMap );
+        SampleMotor motor = new SampleMotor( hardwareMap );
+        SampleServo servo = new SampleServo( hardwareMap );
+        SampleTouchSensor touchSensor = new SampleTouchSensor( hardwareMap );
+        SampleColorSensor colorSensor = new SampleColorSensor( hardwareMap, telemetry );
 
         /* Declare OpMode members. */
         final double    SERVO_SPEED     = 0.02 ;                   // sets rate to move servo
@@ -71,7 +66,7 @@ public class SampleTeleOp extends LinearOpMode {
         waitForStart();
 
         // run until the end of the match (driver presses STOP)
-        while (opModeIsActive()) {
+        while( opModeIsActive() ) {
 
             // Run wheels in POV mode (note: The joystick goes negative when pushed forwards, so negate it)
             // In this mode the Left stick moves the robot fwd and back, the Right stick turns left and right.
@@ -79,13 +74,13 @@ public class SampleTeleOp extends LinearOpMode {
             double direction = -gamepad1.left_stick_y;
 
             // Output the safe vales to the motor drives.
-            robot.setMotorPower(direction);
+            motor.setPower( direction );
 
             // Use gamepad left & right Bumpers to open and close the servo
             if (gamepad1.right_bumper)
-                robot.updateServoPosition( SERVO_SPEED );
+                servo.updatePosition( SERVO_SPEED );
             else if (gamepad1.left_bumper)
-                robot.updateServoPosition( -SERVO_SPEED );
+                servo.updatePosition( -SERVO_SPEED );
 
     /*
             // Use gamepad buttons to move arm up (Y) and down (A)
@@ -97,14 +92,14 @@ public class SampleTeleOp extends LinearOpMode {
                 robot.leftArm.setPower(0.0);
 */
             // Send telemetry message to signify robot running;
-            telemetry.addData("direction",  "%.2f", direction);
-            telemetry.addData("servo",  "Offset = %.2f", robot.getServoPosition() );
-            telemetry.addData( "touch", robot.touchIsPressed() ? "true" : "false");
+            telemetry.addData("direction",  "%.2f", direction );
+            telemetry.addData("servo",  "Offset = %.2f", servo.getPosition() );
+            telemetry.addData( "touch", touchSensor.isPressed() ? "true" : "false" );
 
             // check the status of the x button on either gamepad.
             boolean bCurrState = gamepad1.x;
 
-            robot.updateColor( bCurrState, telemetry );
+            colorSensor.updateColor( bCurrState );
 
             telemetry.update();
 

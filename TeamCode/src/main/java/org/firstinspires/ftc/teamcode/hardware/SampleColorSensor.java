@@ -52,19 +52,12 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  * This hardware class assumes the following device names have been configured on the robot:
  * Note:  All names are lower case and some have single spaces between words.
  *
- * Motor channel:  Left  drive motor:        "left_drive"
- * Motor channel:  Right drive motor:        "right_drive"
- * Motor channel:  Manipulator drive motor:  "left_arm"
- * Servo channel:  Servo to open left claw:  "left_hand"
- * Servo channel:  Servo to open right claw: "right_hand"
+
  */
-public class SampleHardware
+public class SampleColorSensor
 {
-    /* Public OpMode members. */
-    public DcMotor  motor;
-    public Servo    servo;
-    public TouchSensor touch;
-    public ColorSensor colorSensor;
+    ColorSensor colorSensor;
+    Telemetry telemetry;
 
     // hsvValues is an array that will hold the hue, saturation, and value information.
     float hsvValues[] = {0F,0F,0F};
@@ -74,36 +67,14 @@ public class SampleHardware
 
      // bPrevState and bCurrState represent the previous and current state of the button.
     boolean bPrevState = false;
- 
+
     // bLedOn represents the state of the LED.
     boolean bLedOn = true;
 
     View relativeLayout;
 
-    public final double MID_SERVO       =  0.5 ;
-    public final double ARM_UP_POWER    =  0.45 ;
-    public final double ARM_DOWN_POWER  = -0.45 ;
-
     /* Constructor */
-    public SampleHardware( HardwareMap hardwareMap ) {
-
-        // Define and Initialize Motors
-        motor  = hardwareMap.dcMotor.get( "demo motor" );
-        motor.setDirection( DcMotor.Direction.FORWARD ); // Set to REVERSE if using AndyMark motors
-
-        // Set all motors to zero power
-        motor.setPower( 0 );
-
-        // Set all motors to run without encoders.
-        // May want to use RUN_USING_ENCODERS if encoders are installed.
-        motor.setMode( DcMotor.RunMode.RUN_WITHOUT_ENCODER );
-
-        // Define and initialize ALL installed servos.
-        servo  = hardwareMap.servo.get( "demo servo" );
-        servo.setPosition( MID_SERVO );
-
-        // Define and initialize the touch sensor
-        touch  = hardwareMap.touchSensor.get( "demo touch" );
+    public SampleColorSensor( HardwareMap hardwareMap, Telemetry telemetry ) {
 
         // get a reference to our ColorSensor object.
         colorSensor = hardwareMap.colorSensor.get( "demo color sensor" );
@@ -115,30 +86,11 @@ public class SampleHardware
         // color of the Robot Controller app to match the hue detected by the RGB sensor.
         int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
         relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
-    }
-    
-    public void setMotorPower( double power ) {
-        // Output the safe vales to the motor drives.
-        motor.setPower( power );
-    }
-    
-    public void updateServoPosition( double offset ) {
 
-        // Move both servos to new position.  Assume servos are mirror image of each other.
-        offset = Range.clip(offset, -0.5, 0.5);
-
-        servo.setPosition( MID_SERVO + offset );
+        this.telemetry = telemetry;
     }
 
-    public double getServoPosition() {
-        return servo.getPosition();
-    }
-
-    public boolean touchIsPressed() {
-        return touch.isPressed();
-    }
-
-    public void updateColor( boolean bCurrState, Telemetry telemetry ) {
+    public void updateColor( boolean bCurrState ) {
         // check for button state transitions.
         if (bCurrState && (bCurrState != bPrevState))  {
 
@@ -162,6 +114,8 @@ public class SampleHardware
         telemetry.addData("Hue", colorSensor.argb());
         telemetry.addData("Hue", hsvValues[0]);
 
+        telemetry.update();
+
         // change the background color to match the color detected by the RGB sensor.
         // pass a reference to the hue, saturation, and value array as an argument
         // to the HSVToColor method.
@@ -171,7 +125,6 @@ public class SampleHardware
             }
         });
 
-        telemetry.update();       
     }
  }
 
