@@ -8,6 +8,9 @@ import org.firstinspires.ftc.teamcode.hardware.ExampleServo;
 @TeleOp(name = "ExampleTeleOp", group="Example")
 public class ExampleTeleOp extends LinearOpMode{
 
+    static final double CLAW_OPEN = 0.714;
+    static final double CLAW_CLOSED = 0.970;
+
     public void runOpMode() {
 
         ExampleDriveTrain driveTrain = new ExampleDriveTrain( hardwareMap );
@@ -28,10 +31,10 @@ public class ExampleTeleOp extends LinearOpMode{
             driveTrain.drive( leftxstick, leftystick );
 
             if( gamepad1.x ) {
-                claw.setPosition( 0.714 );
+                claw.setPosition( CLAW_OPEN );
 
             } else if( gamepad1.y ) {
-                claw.setPosition( 0.970 );
+                claw.setPosition( CLAW_CLOSED );
             }
 
             if( gamepad1.a ) {
