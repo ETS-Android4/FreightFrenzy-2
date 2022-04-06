@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.hardware.ExampleDriveTrain;
 import org.firstinspires.ftc.teamcode.hardware.ExampleServo;
 
 @TeleOp(name = "ExampleTeleOp", group="Example")
-public class ExampleTeleOp extends LinearOpMode{
+public class ExampleTeleOp extends LinearOpMode {
 
     static final double CLAW_OPEN = 0.714;
     static final double CLAW_CLOSED = 0.970;
@@ -21,14 +21,14 @@ public class ExampleTeleOp extends LinearOpMode{
 
         while( opModeIsActive() && !gamepad2.a ) {
 
-            double leftxstick = gamepad1.left_stick_x;
-            double leftystick = gamepad1.left_stick_y * -1;
+            double leftStickX = gamepad1.left_stick_x;
+            double leftStickY = gamepad1.left_stick_y * -1;
 
-            telemetry.addData("leftxstick", leftxstick);
-            telemetry.addData("leftystick", leftystick);
+            telemetry.addData("leftStick X", leftStickX );
+            telemetry.addData("leftStick Y", leftStickY );
             telemetry.update();
 
-            driveTrain.drive( leftxstick, leftystick );
+            driveTrain.drive( leftStickX, leftStickY );
 
             if( gamepad1.x ) {
                 claw.setPosition( CLAW_OPEN );
