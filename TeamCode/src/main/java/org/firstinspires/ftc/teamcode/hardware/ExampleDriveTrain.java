@@ -10,41 +10,25 @@ public class ExampleDriveTrain {
     DcMotor LF;
     DcMotor LB;
 
-    public ExampleDriveTrain(HardwareMap hardwareMap ) {
+    public ExampleDriveTrain( HardwareMap hardwareMap ) {
 
-        try {
-            LF = hardwareMap.dcMotor.get("LF");
-            LF.setPower(0);
-            LF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            LF.setDirection(DcMotor.Direction.REVERSE);
+        LF = hardwareMap.dcMotor.get("LF");
+        LF.setPower(0);
+        LF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        LF.setDirection(DcMotor.Direction.REVERSE);
 
-        } catch (Exception a) {
-            LF = null;
-        }
-        try {
-            RF = hardwareMap.dcMotor.get("RF");
-            RF.setPower(0);
-            RF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        } catch (Exception a) {
-            RF = null;
-        }
+        RF = hardwareMap.dcMotor.get("RF");
+        RF.setPower(0);
+        RF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        try {
-            LB = hardwareMap.dcMotor.get("LB");
-            LB.setPower(0);
-            LB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            LB.setDirection((DcMotor.Direction.REVERSE));
-        } catch (Exception a) {
-            LB = null;
-        }
+        LB = hardwareMap.dcMotor.get("LB");
+        LB.setPower(0);
+        LB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        LB.setDirection((DcMotor.Direction.REVERSE));
 
-        try {
-            RB = hardwareMap.dcMotor.get("RB");
-            RB.setPower(0);
-            RB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        } catch (Exception a) {
-            RB = null;
-        }
+        RB = hardwareMap.dcMotor.get("RB");
+        RB.setPower(0);
+        RB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public void drive( double x, double y ) {
