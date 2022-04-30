@@ -32,6 +32,8 @@ package org.firstinspires.ftc.teamcode.hardware;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 /**
  * This is NOT an opmode.
  *
@@ -44,28 +46,72 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
  *
 
  */
-public class SampleMotor
-{
-    DcMotor  motor;
+public class SampleMotor {
+
+    DcMotor motor;
+
+    static final double COUNTS_PER_MOTOR_REV = 1120;    // eg: TETRIX Motor Encoder
+    static final double DRIVE_GEAR_REDUCTION = 1.0;     // This is < 1.0 if geared UP
+    static final double WHEEL_DIAMETER_INCHES = 1.0;     // For figuring circumference
+    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
+    static final double DRIVE_SPEED = 0.6;
+    static final double TURN_SPEED = 0.5;
 
     /* Constructor */
-    public SampleMotor( HardwareMap hardwareMap ) {
+    public SampleMotor( HardwareMap hardwareMap, boolean useEncoders ) {
 
         // Define and Initialize Motors
-        motor  = hardwareMap.dcMotor.get( "demo motor" );
+        motor = hardwareMap.dcMotor.get("demo motor");
         motor.setDirection( DcMotor.Direction.FORWARD ); // Set to REVERSE if using AndyMark motors
 
         // Set all motors to zero power
-        motor.setPower( 0 );
+        motor.setPower(0);
 
-        // Set all motors to run without encoders.
-        // May want to use RUN_USING_ENCODERS if encoders are installed.
-        motor.setMode( DcMotor.RunMode.RUN_WITHOUT_ENCODER );
+        if( useEncoders ) {
+            motor.setMode( DcMotor.RunMode.STOP_AND_RESET_ENCODER );
+            motor.setMode( DcMotor.RunMode.RUN_USING_ENCODER );
+        } else {
+            // Set all motors to run without encoders.
+            // May want to use RUN_USING_ENCODERS if encoders are installed.
+            motor.setMode( DcMotor.RunMode.RUN_WITHOUT_ENCODER );
+        }
     }
-    
+
     public void setPower( double power ) {
         // Output the safe vales to the motor drives.
         motor.setPower( power );
     }
- }
 
+     public void startMoving( double speed, double inches ) {
+
+        // Determine new target position, and pass to motor controller
+        int newTarget = motor.getCurrentPosition() + (int) (inches * COUNTS_PER_INCH);
+        motor.setTargetPosition( newTarget );
+
+        // Turn On RUN_TO_POSITION
+        motor.setMode( DcMotor.RunMode.RUN_TO_POSITION );
+
+        motor.setPower( Math.abs( speed ) );
+    }
+
+    public void stopMoving() {
+        // Stop all motion;
+        motor.setPower( 0 );
+
+        // Turn off RUN_TO_POSITION
+        motor.setMode( DcMotor.RunMode.RUN_USING_ENCODER );
+    }
+
+    public boolean hasReachedTarget() {
+
+        return !motor.isBusy();
+    }
+
+    public int getEncoderPosition() {
+        return motor.getCurrentPosition();
+    }
+
+    public int getEncoderTarget() {
+        return motor.getTargetPosition();
+    }
+}

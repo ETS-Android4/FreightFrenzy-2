@@ -14,7 +14,7 @@ public class ExampleTeleOp extends LinearOpMode {
 
     public void runOpMode() {
 
-        ExampleDriveTrain driveTrain = new ExampleDriveTrain( hardwareMap );
+        ExampleDriveTrain driveTrain = new ExampleDriveTrain( hardwareMap, false );
         ExampleServo claw = new ExampleServo( hardwareMap, "claw");
         ExampleServo arm = new ExampleServo( hardwareMap, "arm");
 

@@ -30,7 +30,9 @@
 package org.firstinspires.ftc.teamcode.sample;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.hardware.SampleColorSensor;
 import org.firstinspires.ftc.teamcode.hardware.SampleMotor;
@@ -41,8 +43,11 @@ import org.firstinspires.ftc.teamcode.hardware.SampleTouchSensor;
  * This particular OpMode demonstrates how to access a variety of motors and sensors
  */
 
-@TeleOp(name="SampleTeleOp", group="Sample")
-public class SampleTeleOp extends LinearOpMode {
+@Autonomous(name="SampleAutonomous", group="Sample")
+public class SampleAutonomous extends LinearOpMode {
+
+    SampleMotor motor;
+    private ElapsedTime runtime = new ElapsedTime();
 
     @Override
     public void runOpMode() {
@@ -50,13 +55,13 @@ public class SampleTeleOp extends LinearOpMode {
         /* Initialize the hardware variables.
          * The constructor of the hardware class does all the work here
          */
-        SampleMotor motor = new SampleMotor( hardwareMap, false );
+        motor = new SampleMotor( hardwareMap, true );
         SampleServo servo = new SampleServo( hardwareMap );
         SampleTouchSensor touchSensor = new SampleTouchSensor( hardwareMap );
         SampleColorSensor colorSensor = new SampleColorSensor( hardwareMap, telemetry );
 
         /* Declare OpMode members. */
-        final double    SERVO_SPEED     = 0.02 ;                   // sets rate to move servo
+        final double SERVO_SPEED     = 0.02 ;                   // sets rate to move servo
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");    //
@@ -65,46 +70,50 @@ public class SampleTeleOp extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        // run until the end of the match (driver presses STOP)
-        while( opModeIsActive() ) {
+        drive(0.5,12.0,20.0 );
 
-            // Run wheels in POV mode (note: The joystick goes negative when pushed forwards, so negate it)
-            // In this mode the Left stick moves the robot fwd and back, the Right stick turns left and right.
-            // This way it's also easy to just drive straight, or just turn.
-            double direction = -gamepad1.left_stick_y;
+        sleep(4000 );
 
-            // Output the safe vales to the motor drives.
-            motor.setPower( direction );
+        drive(0.5,-36.0,60.0 );
 
-            // Use gamepad left & right Bumpers to open and close the servo
-            if (gamepad1.right_bumper)
-                servo.updatePosition( SERVO_SPEED );
-            else if (gamepad1.left_bumper)
-                servo.updatePosition( -SERVO_SPEED );
+        sleep(4000 );
+    }
 
-    /*
-            // Use gamepad buttons to move arm up (Y) and down (A)
-            if (gamepad1.y)
-                robot.leftArm.setPower(robot.ARM_UP_POWER);
-            else if (gamepad1.a)
-                robot.leftArm.setPower(robot.ARM_DOWN_POWER);
-            else
-                robot.leftArm.setPower(0.0);
-*/
-            // Send telemetry message to signify robot running;
-            telemetry.addData("direction",  "%.2f", direction );
-            telemetry.addData("servo",  "Offset = %.2f", servo.getPosition() );
-            telemetry.addData( "touch", touchSensor.isPressed() ? "true" : "false" );
+    public void drive( double speed, double inches, double timeout ) {
 
-            // check the status of the x button on either gamepad.
-            boolean bCurrState = gamepad1.x;
+        // Ensure that the opmode is still active
+        if( opModeIsActive() ) {
 
-            colorSensor.updateColor( bCurrState );
+            // reset the timeout time
+            runtime.reset();
 
+            motor.startMoving( speed, inches );
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+            while( opModeIsActive() &&
+                   runtime.seconds() < timeout &&
+                   !motor.hasReachedTarget() ) {
+
+                // Display it for the driver.
+                telemetry.addData("Target",  "Running to %7d", motor.getEncoderTarget() );
+                telemetry.addData( "Position",  "Running at %7d", motor.getEncoderPosition() );
+                telemetry.addData( "Status", "Running" );
+                telemetry.update();
+            }
+
+            motor.stopMoving();
+
+            telemetry.addData("Target",  "Running to %7d", motor.getEncoderTarget() );
+            telemetry.addData( "Position",  "Running at %7d", motor.getEncoderPosition() );
+            telemetry.addData( "Status", "Stopped" );
             telemetry.update();
 
-            // Pace this loop so jaw action is reasonable speed.
-            sleep(50);
+            //  sleep(250);   // optional pause after each move
         }
     }
 }
