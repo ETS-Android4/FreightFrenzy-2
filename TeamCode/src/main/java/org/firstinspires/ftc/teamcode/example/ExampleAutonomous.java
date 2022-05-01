@@ -49,19 +49,12 @@ public class ExampleAutonomous extends LinearOpMode {
                     runtime.seconds() < timeout &&
                     !driveTrain.hasReachedTarget() ) {
 
-                // Display it for the driver.
-                telemetry.addData("Target","Running to %7d : %7d", driveTrain.getLeftEncoderTarget(), driveTrain.getRightEncoderTarget() );
-                telemetry.addData("Position","Running at %7d : %7d", driveTrain.getLeftEncoderPosition(), driveTrain.getRightEncoderPosition() );
-                telemetry.addData("Status","Running" );
-                telemetry.update();
+                driveTrain.displayPosition( telemetry, "Running" );
             }
 
             driveTrain.stopMoving();
 
-            telemetry.addData("Target","Running to %7d : %7d", driveTrain.getLeftEncoderTarget(), driveTrain.getRightEncoderTarget() );
-            telemetry.addData("Position","Running at %7d : %7d", driveTrain.getLeftEncoderPosition(), driveTrain.getRightEncoderPosition() );
-            telemetry.addData("Status","Stopped" );
-            telemetry.update();
+            driveTrain.displayPosition( telemetry, "Stopped" );
 
             //  sleep(250);   // optional pause after each move
         }

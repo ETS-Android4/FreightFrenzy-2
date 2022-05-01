@@ -107,11 +107,12 @@ public class SampleMotor {
         return !motor.isBusy();
     }
 
-    public int getEncoderPosition() {
-        return motor.getCurrentPosition();
-    }
+    public void displayPosition( Telemetry telemetry, String status ) {
 
-    public int getEncoderTarget() {
-        return motor.getTargetPosition();
+        // Display it for the driver.
+        telemetry.addData("Target", "Running to %7d", motor.getTargetPosition() );
+        telemetry.addData("Position", "Running at %7d", motor.getCurrentPosition() );
+        telemetry.addData("Status", status );
+        telemetry.update();
     }
 }

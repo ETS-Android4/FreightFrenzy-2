@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class ExampleDriveTrain {
 
     DcMotor LF;
@@ -94,19 +96,11 @@ public class ExampleDriveTrain {
         return !( LF.isBusy() && RF.isBusy() );
     }
 
-    public int getLeftEncoderPosition() {
-        return LF.getCurrentPosition();
-    }
+    public void displayPosition( Telemetry telemetry, String status ) {
 
-    public int getRightEncoderPosition() {
-        return RF.getCurrentPosition();
-    }
-
-    public int getLeftEncoderTarget() {
-        return LF.getTargetPosition();
-    }
-
-    public int getRightEncoderTarget() {
-        return RF.getTargetPosition();
+        telemetry.addData("Target", "Running to %7d : %7d", LF.getTargetPosition(), RF.getTargetPosition() );
+        telemetry.addData("Position", "Running at %7d : %7d", LF.getCurrentPosition(), RF.getCurrentPosition() );
+        telemetry.addData("Status", status );
+        telemetry.update();
     }
 }

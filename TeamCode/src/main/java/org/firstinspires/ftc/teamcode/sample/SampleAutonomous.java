@@ -99,19 +99,12 @@ public class SampleAutonomous extends LinearOpMode {
                    runtime.seconds() < timeout &&
                    !motor.hasReachedTarget() ) {
 
-                // Display it for the driver.
-                telemetry.addData("Target",  "Running to %7d", motor.getEncoderTarget() );
-                telemetry.addData( "Position",  "Running at %7d", motor.getEncoderPosition() );
-                telemetry.addData( "Status", "Running" );
-                telemetry.update();
+                motor.displayPosition( telemetry, "Running" );
             }
 
             motor.stopMoving();
 
-            telemetry.addData("Target",  "Running to %7d", motor.getEncoderTarget() );
-            telemetry.addData( "Position",  "Running at %7d", motor.getEncoderPosition() );
-            telemetry.addData( "Status", "Stopped" );
-            telemetry.update();
+            motor.displayPosition( telemetry, "Stopped" );
 
             //  sleep(250);   // optional pause after each move
         }
