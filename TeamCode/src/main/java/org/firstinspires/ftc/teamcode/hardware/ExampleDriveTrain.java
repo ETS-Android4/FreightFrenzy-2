@@ -10,6 +10,8 @@ public class ExampleDriveTrain {
 
     DcMotor LF;
     DcMotor RF;
+    double leftTargetDistance;
+    double rightTargetDistance;
 
     static final double     COUNTS_PER_MOTOR_REV    = 1120 ;    // eg: TETRIX Motor Encoder
     static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
@@ -66,6 +68,9 @@ public class ExampleDriveTrain {
 
     public void startMoving( double speed, double leftInches, double rightInches ) {
 
+        leftTargetDistance = leftInches;
+        rightTargetDistance = rightInches;
+
         // Determine new target position, and pass to motor controller
         int newLeftTarget = LF.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
         LF.setTargetPosition( newLeftTarget );
@@ -98,6 +103,9 @@ public class ExampleDriveTrain {
 
     public void displayPosition( Telemetry telemetry, String status ) {
 
+        telemetry.addData("Target Distance", "%4.2f\" : %4.2f\"", leftTargetDistance, rightTargetDistance );
+        telemetry.addData("Delta Distance", "%4.2f\" : %4.2f\"", ( LF.getTargetPosition() - LF.getCurrentPosition() ) / COUNTS_PER_INCH,
+                ( RF.getTargetPosition() - RF.getCurrentPosition() ) / COUNTS_PER_INCH );
         telemetry.addData("Target", "Running to %7d : %7d", LF.getTargetPosition(), RF.getTargetPosition() );
         telemetry.addData("Position", "Running at %7d : %7d", LF.getCurrentPosition(), RF.getCurrentPosition() );
         telemetry.addData("Status", status );

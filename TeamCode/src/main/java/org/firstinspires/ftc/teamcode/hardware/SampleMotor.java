@@ -49,6 +49,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class SampleMotor {
 
     DcMotor motor;
+    double targetDistance;
 
     static final double COUNTS_PER_MOTOR_REV = 1120;    // eg: TETRIX Motor Encoder
     static final double DRIVE_GEAR_REDUCTION = 1.0;     // This is < 1.0 if geared UP
@@ -84,6 +85,8 @@ public class SampleMotor {
 
      public void startMoving( double speed, double inches ) {
 
+        targetDistance = inches;
+
         // Determine new target position, and pass to motor controller
         int newTarget = motor.getCurrentPosition() + (int) (inches * COUNTS_PER_INCH);
         motor.setTargetPosition( newTarget );
@@ -110,6 +113,8 @@ public class SampleMotor {
     public void displayPosition( Telemetry telemetry, String status ) {
 
         // Display it for the driver.
+        telemetry.addData("Target Distance", "%4.2f\"", targetDistance );
+        telemetry.addData("Delta Distance", "%4.2f\"", ( motor.getTargetPosition() - motor.getCurrentPosition() ) / COUNTS_PER_INCH );
         telemetry.addData("Target", "Running to %7d", motor.getTargetPosition() );
         telemetry.addData("Position", "Running at %7d", motor.getCurrentPosition() );
         telemetry.addData("Status", status );
