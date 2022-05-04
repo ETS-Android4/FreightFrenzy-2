@@ -47,8 +47,6 @@ import org.firstinspires.ftc.teamcode.hardware.OpModeIsActive;
 @Autonomous(name="SampleAutonomous", group="Sample")
 public class SampleAutonomous extends LinearOpMode implements OpModeIsActive {
 
-    SampleMotor motor;
-
     static final double DRIVE_SPEED = 0.6;
     static final double TURN_SPEED = 0.5;
 
@@ -58,7 +56,7 @@ public class SampleAutonomous extends LinearOpMode implements OpModeIsActive {
         /* Initialize the hardware variables.
          * The constructor of the hardware class does all the work here
          */
-        motor = new SampleMotor( hardwareMap, true );
+        SampleMotor motor = new SampleMotor( hardwareMap, true );
         SampleServo servo = new SampleServo( hardwareMap );
         SampleTouchSensor touchSensor = new SampleTouchSensor( hardwareMap );
         SampleColorSensor colorSensor = new SampleColorSensor( hardwareMap, telemetry );
