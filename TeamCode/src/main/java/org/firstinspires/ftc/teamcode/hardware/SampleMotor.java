@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -50,6 +51,7 @@ public class SampleMotor {
 
     DcMotor motor;
     double targetDistance;
+    private ElapsedTime runtime = new ElapsedTime();
 
     static final double COUNTS_PER_MOTOR_REV = 1120;    // eg: TETRIX Motor Encoder
     static final double DRIVE_GEAR_REDUCTION = 1.0;     // This is < 1.0 if geared UP
@@ -81,6 +83,37 @@ public class SampleMotor {
     public void setPower( double power ) {
         // Output the safe vales to the motor drives.
         motor.setPower( power );
+    }
+
+    public void drive( double speed, double inches, double timeout, OpModeIsActive opMode, Telemetry telemetry ) {
+
+        // Ensure that the opmode is still active
+        if( opMode.isActive() ) {
+
+            // reset the timeout time
+            runtime.reset();
+
+            startMoving( speed, inches );
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+            while( opMode.isActive() &&
+                    runtime.seconds() < timeout &&
+                    !hasReachedTarget() ) {
+
+                displayPosition( telemetry, "Running" );
+            }
+
+            stopMoving();
+
+            displayPosition( telemetry, "Stopped" );
+
+            //  sleep(250);   // optional pause after each move
+        }
     }
 
      public void startMoving( double speed, double inches ) {

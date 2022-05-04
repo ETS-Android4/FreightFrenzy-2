@@ -38,16 +38,16 @@ import org.firstinspires.ftc.teamcode.hardware.SampleColorSensor;
 import org.firstinspires.ftc.teamcode.hardware.SampleMotor;
 import org.firstinspires.ftc.teamcode.hardware.SampleServo;
 import org.firstinspires.ftc.teamcode.hardware.SampleTouchSensor;
+import org.firstinspires.ftc.teamcode.hardware.OpModeIsActive;
 
 /**
  * This particular OpMode demonstrates how to access a variety of motors and sensors
  */
 
 @Autonomous(name="SampleAutonomous", group="Sample")
-public class SampleAutonomous extends LinearOpMode {
+public class SampleAutonomous extends LinearOpMode implements OpModeIsActive {
 
     SampleMotor motor;
-    private ElapsedTime runtime = new ElapsedTime();
 
     @Override
     public void runOpMode() {
@@ -70,43 +70,17 @@ public class SampleAutonomous extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        drive(0.5,12.0,20.0 );
+        motor.drive( 0.5, 12.0, 20.0, this, telemetry );
 
         sleep(4000 );
 
-        drive(0.5,-36.0,60.0 );
+        motor.drive(0.5,-36.0,60.0, this, telemetry );
 
         sleep(4000 );
     }
 
-    public void drive( double speed, double inches, double timeout ) {
-
-        // Ensure that the opmode is still active
-        if( opModeIsActive() ) {
-
-            // reset the timeout time
-            runtime.reset();
-
-            motor.startMoving( speed, inches );
-
-            // keep looping while we are still active, and there is time left, and both motors are running.
-            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-            // its target position, the motion will stop.  This is "safer" in the event that the robot will
-            // always end the motion as soon as possible.
-            // However, if you require that BOTH motors have finished their moves before the robot continues
-            // onto the next step, use (isBusy() || isBusy()) in the loop test.
-            while( opModeIsActive() &&
-                   runtime.seconds() < timeout &&
-                   !motor.hasReachedTarget() ) {
-
-                motor.displayPosition( telemetry, "Running" );
-            }
-
-            motor.stopMoving();
-
-            motor.displayPosition( telemetry, "Stopped" );
-
-            //  sleep(250);   // optional pause after each move
-        }
+    @Override
+    public boolean isActive() {
+        return opModeIsActive();
     }
 }
