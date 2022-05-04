@@ -68,7 +68,8 @@ public class ExampleDriveTrain {
         }
     }
 
-    public void drive( double speed, double leftInches, double rightInches, double timeout, OpModeIsActive opMode, Telemetry telemetry ) {
+    public void drive( double speed, double leftInches, double rightInches, double timeout,
+                       OpModeIsActive opMode, Telemetry telemetry ) {
 
         // Ensure that the opmode is still active
         if (opMode.isActive()) {
@@ -131,14 +132,15 @@ public class ExampleDriveTrain {
 
     public boolean hasReachedTarget() {
 
-        return !LF.isBusy() && !RF.isBusy();
+        return !(LF.isBusy() && RF.isBusy());
     }
 
     public void displayPosition( Telemetry telemetry, String status ) {
 
         telemetry.addData("Target Distance", "%4.2f\" : %4.2f\"", leftTargetDistance, rightTargetDistance );
-        telemetry.addData("Delta Distance", "%4.2f\" : %4.2f\"", ( LF.getTargetPosition() - LF.getCurrentPosition() ) / COUNTS_PER_INCH,
-                ( RF.getTargetPosition() - RF.getCurrentPosition() ) / COUNTS_PER_INCH );
+        telemetry.addData("Delta Distance", "%4.2f\" : %4.2f\"",
+                ( LF.getTargetPosition() - LF.getCurrentPosition() ) / COUNTS_PER_INCH,
+                      ( RF.getTargetPosition() - RF.getCurrentPosition() ) / COUNTS_PER_INCH );
         telemetry.addData("Target", "Running to %7d : %7d", LF.getTargetPosition(), RF.getTargetPosition() );
         telemetry.addData("Position", "Running at %7d : %7d", LF.getCurrentPosition(), RF.getCurrentPosition() );
         telemetry.addData("Status", status );

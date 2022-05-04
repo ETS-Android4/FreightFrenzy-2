@@ -15,6 +15,8 @@ public class ExampleAutonomous extends LinearOpMode implements OpModeIsActive {
 
     static final double CLAW_OPEN = 0.714;
     static final double CLAW_CLOSED = 0.970;
+    static final double DRIVE_SPEED = 0.6;
+    static final double TURN_SPEED = 0.5;
 
     public void runOpMode() {
 
@@ -24,10 +26,18 @@ public class ExampleAutonomous extends LinearOpMode implements OpModeIsActive {
 
         waitForStart();
 
-        driveTrain.drive( 0.5, 24.0, 24.0, 30.0, this, telemetry );
+        driveTrain.drive( DRIVE_SPEED, 24.0, 24.0, 10.0, this, telemetry );  // S1: Forward 24 Inches with 10 Sec timeout
 
-        sleep(5000 );
-     }
+        sleep(2000 );
+
+        driveTrain.drive( TURN_SPEED,12, -12, 10.0, this, telemetry );  // S2: Turn Right 12 Inches with 10 Sec timeout
+
+        sleep(2000 );
+
+        driveTrain.drive( DRIVE_SPEED, -24, -24, 10.0, this, telemetry );  // S3: Reverse 24 Inches with 10 Sec timeout
+
+        sleep(4000 );
+    }
 
     @Override
     public boolean isActive() {
