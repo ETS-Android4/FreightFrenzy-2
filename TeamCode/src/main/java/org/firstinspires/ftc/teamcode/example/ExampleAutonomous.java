@@ -11,16 +11,15 @@ import org.firstinspires.ftc.teamcode.hardware.OpModeIsActive;
 @Autonomous(name = "ExampleAutonomous", group="Example")
 public class ExampleAutonomous extends LinearOpMode implements OpModeIsActive {
 
-    ExampleDriveTrain driveTrain;
-
     static final double CLAW_OPEN = 0.714;
     static final double CLAW_CLOSED = 0.970;
     static final double DRIVE_SPEED = 0.6;
     static final double TURN_SPEED = 0.5;
 
+    @Override
     public void runOpMode() {
 
-        driveTrain = new ExampleDriveTrain( hardwareMap, true );
+        ExampleDriveTrain driveTrain = new ExampleDriveTrain( hardwareMap, true );
         ExampleServo claw = new ExampleServo( hardwareMap, "claw");
         ExampleServo arm = new ExampleServo( hardwareMap, "arm");
 

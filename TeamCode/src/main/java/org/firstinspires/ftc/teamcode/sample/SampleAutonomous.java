@@ -49,6 +49,9 @@ public class SampleAutonomous extends LinearOpMode implements OpModeIsActive {
 
     SampleMotor motor;
 
+    static final double DRIVE_SPEED = 0.6;
+    static final double TURN_SPEED = 0.5;
+
     @Override
     public void runOpMode() {
 
@@ -70,11 +73,11 @@ public class SampleAutonomous extends LinearOpMode implements OpModeIsActive {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        motor.drive( 0.5, 12.0, 20.0, this, telemetry );
+        motor.drive( DRIVE_SPEED, 12.0, 20.0, this, telemetry );
 
         sleep(4000 );
 
-        motor.drive(0.5,-36.0,60.0, this, telemetry );
+        motor.drive( DRIVE_SPEED,-36.0,60.0, this, telemetry );
 
         sleep(4000 );
     }
